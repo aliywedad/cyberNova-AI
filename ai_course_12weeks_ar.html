@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="مقدمة إلى الذكاء الاصطناعي — دورة 12 أسبوعاً للمبتدئين تغطي التاريخ، الأدوات، الأخلاقيات، بايثون، هندسة البيانات، روبوتات المحادثة، الضبط الدقيق، RAG، والوكلاء.">
+  <title>مقدمة إلى الذكاء الاصطناعي — دورة كاملة 12 أسبوعاً</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.34.0/dist/tabler-icons.min.css">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #F2F4F8;
+      --surface:   #FFFFFF;
+      --surface-2: #F7F8FB;
+      --surface-3: #EFF1F6;
+      --border:    #E3E6EE;
+      --border-lt: #EDF0F7;
+      --txt-1:     #0D1117;
+      --txt-2:     #556070;
+      --txt-3:     #9BA7B8;
+
+      --purple: #5E4ECC; --purple-bg: #EEEDFB; --purple-dim: #C5C0EF;
+      --teal:   #0C8F72; --teal-bg:   #E0F5EE; --teal-dim:   #76CEBA;
+      --amber:  #C27A06; --amber-bg:  #FEF3C7; --amber-dim:  #F0C560;
+      --coral:  #C94527; --coral-bg:  #FEECE7; --coral-dim:  #F09D85;
+      --blue:   #2057D8; --blue-bg:   #EAF1FD; --blue-dim:   #92BAF5;
+      --pink:   #B51752; --pink-bg:   #FAEBF2; --pink-dim:   #EE99C0;
+      --green:  #1A7A3F; --green-bg:  #E7F7EE; --green-dim:  #7FCA9D;
+      --gray:   #52606E; --gray-bg:   #F1F2F5; --gray-dim:   #BDC3CB;
+
+      --grad: linear-gradient(90deg, #667EEA 0%, #9B6BD8 50%, #F76680 100%);
+
+      --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px;
+      --s5: 20px; --s6: 24px; --s8: 32px; --s10: 40px;
+
+      --r-s:  6px; --r-m: 10px; --r-l: 14px; --r-xl: 20px; --r-f: 999px;
+
+      --sh-1: 0 1px 3px rgba(0,0,0,.06);
+      --sh-2: 0 4px 12px rgba(0,0,0,.07);
+      --sh-3: 0 8px 24px rgba(0,0,0,.09);
+
+      --t: .18s ease;
+      --t-mid: .28s ease;
+      --mw: 920px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--txt-1);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: var(--mw);
+      margin: 0 auto;
+      padding: var(--s6) var(--s4) 60px;
+    }
+    @media (min-width: 640px)  { .page { padding: var(--s8) var(--s6) 80px; } }
+    @media (min-width: 1024px) { .page { padding: var(--s10) var(--s4) 80px; } }
+
+    .hero {
+      background: var(--surface);
+      border-radius: var(--r-xl);
+      padding: var(--s8) var(--s8) var(--s6);
+      margin-bottom: var(--s3);
+      box-shadow: var(--sh-2);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 4px;
+      background: var(--grad);
+    }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s4); }
+    .hero-title {
+      font-size: clamp(18px, 3.5vw, 26px);
+      font-weight: 700;
+      color: var(--txt-1);
+      line-height: 1.35;
+      margin-bottom: var(--s2);
+    }
+    .hero-sub { font-size: 14px; color: var(--txt-2); line-height: 1.8; max-width: 660px; }
+
+    .bdg {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11.5px; font-weight: 600;
+      padding: 3px 10px; border-radius: var(--r-f);
+      line-height: 1; white-space: nowrap;
+    }
+    .bdg-purple { background: var(--purple-bg); color: var(--purple); }
+    .bdg-teal   { background: var(--teal-bg);   color: var(--teal);   }
+    .bdg-amber  { background: var(--amber-bg);  color: var(--amber);  }
+    .bdg-coral  { background: var(--coral-bg);  color: var(--coral);  }
+    .bdg-blue   { background: var(--blue-bg);   color: var(--blue);   }
+    .bdg-pink   { background: var(--pink-bg);   color: var(--pink);   }
+    .bdg-green  { background: var(--green-bg);  color: var(--green);  }
+    .bdg-gray   { background: var(--gray-bg);   color: var(--gray);   }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s2);
+      margin-bottom: var(--s3);
+    }
+    @media (min-width: 480px) { .stats { grid-template-columns: repeat(5, 1fr); } }
+
+    .stat {
+      background: var(--surface);
+      border-radius: var(--r-l);
+      padding: var(--s4) var(--s3);
+      text-align: center;
+      box-shadow: var(--sh-1);
+      transition: transform var(--t), box-shadow var(--t);
+      cursor: default;
+    }
+    .stat:hover { transform: translateY(-2px); box-shadow: var(--sh-2); }
+    .stat-n { font-size: 22px; font-weight: 700; color: var(--txt-1); line-height: 1; }
+    .stat-n small { font-size: 11px; font-weight: 500; color: var(--txt-3); margin-right: 1px; }
+    .stat-l { font-size: 11px; color: var(--txt-2); margin-top: 5px; font-weight: 600; }
+
+    .pnav-wrap {
+      background: var(--surface);
+      border-radius: var(--r-l);
+      padding: var(--s2);
+      margin-bottom: var(--s4);
+      box-shadow: var(--sh-1);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .pnav-wrap::-webkit-scrollbar { display: none; }
+    .pnav { display: flex; gap: var(--s1); min-width: max-content; }
+    @media (min-width: 760px) { .pnav { flex-wrap: wrap; min-width: unset; } }
+
+    .pbtn {
+      font-size: 12.5px; font-weight: 600;
+      padding: 6px 14px; border-radius: var(--r-f);
+      border: none; background: transparent; color: var(--txt-2);
+      cursor: pointer; transition: background var(--t), color var(--t);
+      white-space: nowrap; font-family: 'Cairo', sans-serif;
+    }
+    .pbtn:hover { background: var(--surface-3); color: var(--txt-1); }
+    .pbtn.active { background: var(--txt-1); color: #fff; }
+    .pbtn:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+    .phase-strip {
+      font-size: 11px; font-weight: 700; color: var(--txt-3);
+      letter-spacing: .04em;
+      padding: var(--s5) 0 var(--s2);
+      display: flex; align-items: center; gap: var(--s3);
+    }
+    .phase-strip::before { content: ''; flex: 1; height: 1px; background: var(--border-lt); }
+    .phase-strip:first-child { padding-top: 0; }
+
+    .wgrid { display: flex; flex-direction: column; gap: var(--s2); }
+
+    .wcard {
+      background: var(--surface);
+      border: 1.5px solid var(--border-lt);
+      border-radius: var(--r-l);
+      overflow: hidden; cursor: pointer;
+      box-shadow: var(--sh-1);
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .wcard:hover:not(.open) { border-color: var(--border); box-shadow: var(--sh-2); }
+    .wcard.open { border-color: var(--purple-dim); box-shadow: 0 0 0 3px rgba(94,78,204,.07), var(--sh-2); }
+
+    .whead {
+      display: flex; align-items: center; gap: var(--s3);
+      padding: 13px 16px; user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .wnum { font-size: 11px; font-weight: 700; color: var(--txt-3); min-width: 72px; flex-shrink: 0; }
+    .wtitle { font-size: 13.5px; font-weight: 700; color: var(--txt-1); flex: 1; line-height: 1.45; }
+    .whead-right { display: flex; align-items: center; gap: var(--s2); flex-shrink: 0; }
+    @media (max-width: 400px) { .whead-right .bdg { display: none; } }
+
+    .chevron { color: var(--txt-3); transition: transform var(--t-mid); font-size: 17px; display: flex; align-items: center; }
+    .open .chevron { transform: rotate(180deg); color: var(--purple); }
+
+    .wbody { max-height: 0; overflow: hidden; transition: max-height .38s cubic-bezier(0.4,0,0.2,1); }
+    .open .wbody { max-height: 2000px; }
+    .wbody-inner { padding: var(--s4); border-top: 1.5px solid var(--border-lt); }
+
+    .classes { display: grid; grid-template-columns: 1fr; gap: var(--s2); margin-bottom: var(--s3); }
+    @media (min-width: 520px) { .classes { grid-template-columns: 1fr 1fr; } }
+
+    .cbox { background: var(--surface-2); border-radius: var(--r-m); padding: 12px 14px; border: 1px solid var(--border-lt); }
+    .clabel { font-size: 10.5px; color: var(--txt-3); font-weight: 700; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
+    .cname { font-size: 13px; font-weight: 700; color: var(--txt-1); margin-bottom: 8px; line-height: 1.45; }
+    .cpts { list-style: none; }
+    .cpts li { font-size: 12px; color: var(--txt-2); padding: 2px 0; display: flex; gap: 6px; align-items: flex-start; line-height: 1.6; }
+    .cpts li::before { content: '·'; color: var(--txt-3); flex-shrink: 0; font-size: 15px; line-height: 1.25; }
+
+    .goals { padding: 10px 14px; background: var(--teal-bg); border-radius: var(--r-m); border-right: 3px solid var(--teal); margin-bottom: var(--s2); }
+    .glabel { font-size: 10.5px; font-weight: 700; color: var(--teal); margin-bottom: 3px; text-transform: uppercase; letter-spacing: .04em; display: flex; align-items: center; gap: 5px; }
+    .gtext { font-size: 12.5px; color: #0A5C49; line-height: 1.7; }
+
+    .fbox { padding: 10px 14px; border-radius: var(--r-m); margin-bottom: var(--s2); border: 1.5px solid; }
+    .fg  { background: var(--green-bg); border-color: var(--green-dim); }
+    .fb  { background: var(--blue-bg);  border-color: var(--blue-dim);  }
+    .ft  { background: var(--teal-bg);  border-color: var(--teal-dim);  }
+    .fp  { background: var(--purple-bg);border-color: var(--purple-dim);}
+    .fc  { background: var(--coral-bg); border-color: var(--coral-dim); }
+    .fpi { background: var(--pink-bg);  border-color: var(--pink-dim);  }
+
+    .flabel { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+    .fg .flabel  { color: var(--green);  }
+    .fb .flabel  { color: var(--blue);   }
+    .ft .flabel  { color: var(--teal);   }
+    .fp .flabel  { color: var(--purple); }
+    .fc .flabel  { color: var(--coral);  }
+    .fpi .flabel { color: var(--pink);   }
+
+    .ftext { font-size: 12.5px; line-height: 1.7; }
+    .fg .ftext  { color: #1A6134; }
+    .fb .ftext  { color: #1A4BAD; }
+    .ft .ftext  { color: #0A5C49; }
+    .fp .ftext  { color: #4637A5; }
+    .fc .ftext  { color: #A5361E; }
+    .fpi .ftext { color: #961142; }
+
+    .theory-tag {
+      display: inline-flex; align-items: center;
+      font-size: 10px; font-weight: 600;
+      padding: 2px 7px; border-radius: var(--r-f);
+      background: var(--pink-bg); color: var(--pink);
+      border: 1px solid var(--pink-dim);
+      margin-right: 7px; vertical-align: middle;
+    }
+
+    .flow-note {
+      margin: 4px 0 var(--s2);
+      padding: 9px 14px; border-radius: var(--r-m);
+      background: var(--surface-2); border: 1px solid var(--border-lt);
+      font-size: 12.5px; color: var(--txt-2);
+      display: flex; align-items: flex-start; gap: 8px; line-height: 1.65;
+    }
+    .flow-note i { color: var(--txt-3); flex-shrink: 0; margin-top: 2px; font-size: 14px; transform: scaleX(-1); }
+
+    .pbanner { padding: 10px 14px; border-radius: var(--r-m); border: 1.5px solid; }
+    .bc  { background: var(--coral-bg);  border-color: var(--coral-dim);  }
+    .bb  { background: var(--blue-bg);   border-color: var(--blue-dim);   }
+    .bpp { background: var(--purple-bg); border-color: var(--purple-dim); }
+    .bg  { background: var(--green-bg);  border-color: var(--green-dim);  }
+    .bpk { background: var(--pink-bg);   border-color: var(--pink-dim);   }
+    .bt  { background: var(--teal-bg);   border-color: var(--teal-dim);   }
+
+    .plb { font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; margin-bottom: 2px; }
+    .bc .plb  { color: var(--coral);  }
+    .bb .plb  { color: var(--blue);   }
+    .bpp .plb { color: var(--purple); }
+    .bg .plb  { color: var(--green);  }
+    .bpk .plb { color: var(--pink);   }
+    .bt .plb  { color: var(--teal);   }
+
+    .pttl { font-size: 13.5px; font-weight: 700; }
+    .bc .pttl  { color: #A5361E; }
+    .bb .pttl  { color: #1A4BAD; }
+    .bpp .pttl { color: #4637A5; }
+    .bg .pttl  { color: #1A6134; }
+    .bpk .pttl { color: #961142; }
+    .bt .pttl  { color: #0A5C49; }
+
+    .pdsc { font-size: 12px; margin-top: 3px; line-height: 1.65; }
+    .bc .pdsc  { color: var(--coral);  }
+    .bb .pdsc  { color: var(--blue);   }
+    .bpp .pdsc { color: var(--purple); }
+    .bg .pdsc  { color: var(--green);  }
+    .bpk .pdsc { color: var(--pink);   }
+    .bt .pdsc  { color: var(--teal);   }
+
+    .proj-section { margin-top: var(--s8); }
+    .section-header { display: flex; align-items: center; gap: var(--s3); margin-bottom: var(--s4); }
+    .section-title { font-size: 15px; font-weight: 700; color: var(--txt-1); white-space: nowrap; }
+    .section-line { flex: 1; height: 1px; background: var(--border-lt); }
+
+    .pcards { display: grid; grid-template-columns: 1fr; gap: var(--s3); }
+    @media (min-width: 520px) { .pcards { grid-template-columns: repeat(3, 1fr); } }
+
+    .pcard { border-radius: var(--r-l); padding: var(--s5); border: 1.5px solid; transition: transform var(--t), box-shadow var(--t); }
+    .pcard:hover { transform: translateY(-4px); box-shadow: var(--sh-3); }
+
+    .p1 { background: var(--green-bg);  border-color: var(--green-dim);  }
+    .p2 { background: var(--blue-bg);   border-color: var(--blue-dim);   }
+    .p3 { background: var(--purple-bg); border-color: var(--purple-dim); }
+
+    .picon { font-size: 22px; margin-bottom: var(--s2); }
+    .p1 .picon { color: var(--green);  }
+    .p2 .picon { color: var(--blue);   }
+    .p3 .picon { color: var(--purple); }
+
+    .pwk { font-size: 10.5px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; margin-bottom: 3px; }
+    .p1 .pwk { color: #1A6134; }
+    .p2 .pwk { color: #1A4BAD; }
+    .p3 .pwk { color: #4637A5; }
+
+    .pname { font-size: 13.5px; font-weight: 700; margin-bottom: var(--s1); line-height: 1.35; }
+    .p1 .pname { color: #12472A; }
+    .p2 .pname { color: #12336E; }
+    .p3 .pname { color: #2E2480; }
+
+    .pdscr2 { font-size: 12.5px; line-height: 1.7; }
+    .p1 .pdscr2 { color: #1A6134; }
+    .p2 .pdscr2 { color: #1A4BAD; }
+    .p3 .pdscr2 { color: #4637A5; }
+
+    .pstk { font-size: 11px; font-weight: 500; margin-top: var(--s3); padding-top: var(--s2); border-top: 1px solid rgba(0,0,0,.09); }
+    .p1 .pstk { color: #226B3F; }
+    .p2 .pstk { color: #1A4BAD; }
+    .p3 .pstk { color: #5040B8; }
+
+    .footer { margin-top: var(--s10); text-align: center; font-size: 12px; color: var(--txt-3); padding-bottom: var(--s4); }
+
+    .scroll-top {
+      position: fixed; bottom: 24px; left: 24px;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: var(--txt-1); color: #fff; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; box-shadow: var(--sh-3);
+      opacity: 0; transform: translateY(10px); pointer-events: none;
+      transition: opacity var(--t-mid), transform var(--t-mid); z-index: 200;
+    }
+    .scroll-top.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+    .scroll-top:hover   { transform: translateY(-2px); }
+
+    @media print {
+      body { background: #fff; }
+      .page { padding: 16px; max-width: 100%; }
+      .scroll-top { display: none; }
+      .wcard { break-inside: avoid; }
+      .open .wbody { max-height: none !important; overflow: visible !important; }
+      .pnav-wrap { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <div class="hero">
+    <div class="hero-badges">
+      <span class="bdg bdg-purple">مناسب للمبتدئين</span>
+      <span class="bdg bdg-green">هندسة البيانات</span>
+      <span class="bdg bdg-teal">روبوتات المحادثة</span>
+      <span class="bdg bdg-blue">(RAG)</span>
+      <span class="bdg bdg-pink">الضبط الدقيق (نظري)</span>
+      <span class="bdg bdg-amber">الوكلاء والوكلاء المتعددون</span>
+    </div>
+    <div class="hero-title">مقدمة إلى الذكاء الاصطناعي — الدورة الكاملة</div>
+    <div class="hero-sub">التاريخ ← الأدوات ← الأخلاقيات ← (Python) ← هندسة البيانات ← روبوتات المحادثة ← الضبط الدقيق (نظري) ← (RAG) ← الوكلاء ← الوكلاء المتعددون. 12 أسبوعاً، بدون رياضيات، بدون خبرة برمجية مسبقة.</div>
+  </div>
+
+  <!-- ── STATS ─────────────────────────────────────────────── -->
+  <div class="stats">
+    <div class="stat"><div class="stat-n">12</div><div class="stat-l">أسبوع</div></div>
+    <div class="stat"><div class="stat-n">24</div><div class="stat-l">حصة</div></div>
+    <div class="stat"><div class="stat-n">3</div><div class="stat-l">مشاريع</div></div>
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">مراحل</div></div>
+    <div class="stat"><div class="stat-n">90<small>د</small></div><div class="stat-l">لكل حصة</div></div>
+  </div>
+
+  <!-- ── PHASE NAV ──────────────────────────────────────────── -->
+  <div class="pnav-wrap">
+    <div class="pnav" id="phaseNav">
+      <button class="pbtn active" data-phase="all">جميع الأسابيع</button>
+      <button class="pbtn" data-phase="1">المرحلة 1 — أسس الذكاء الاصطناعي</button>
+      <button class="pbtn" data-phase="2">المرحلة 2 — الأدوات والأخلاقيات</button>
+      <button class="pbtn" data-phase="3">المرحلة 3 — (Python) والبيانات</button>
+      <button class="pbtn" data-phase="4">المرحلة 4 — هندسة البيانات</button>
+      <button class="pbtn" data-phase="5">المرحلة 5 — المحادثة، الضبط الدقيق و(RAG)</button>
+      <button class="pbtn" data-phase="6">المرحلة 6 — الوكلاء والبناء</button>
+    </div>
+  </div>
+
+  <!-- ── WEEK GRID (JS-rendered) ───────────────────────────── -->
+  <div class="wgrid" id="weekGrid"></div>
+
+  <!-- ── CAPSTONE PROJECTS ─────────────────────────────────── -->
+  <div class="proj-section">
+    <div class="section-header">
+      <div class="section-line"></div>
+      <div class="section-title">3 مشاريع ختامية</div>
+    </div>
+    <div class="pcards">
+      <div class="pcard p1">
+        <div class="picon"><i class="ti ti-database" aria-hidden="true"></i></div>
+        <div class="pwk">المشروع الأول — الأسبوع السابع</div>
+        <div class="pname">إنقاذ البيانات الفوضوية</div>
+        <div class="pdscr2">استلام مجموعة بيانات حقيقية معطوبة. تحديد كل مشكلة. تنظيفها وتحويلها من البداية للنهاية في (Python). توثيق جميع القرارات.</div>
+        <div class="pstk">(Python) · (pandas) · (Cursor) · (CSV)</div>
+      </div>
+      <div class="pcard p2">
+        <div class="picon"><i class="ti ti-search" aria-hidden="true"></i></div>
+        <div class="pwk">المشروع الثاني — الأسبوع العاشر</div>
+        <div class="pname">مساعد المعرفة الشخصية</div>
+        <div class="pdscr2">ترقية روبوت المحادثة من الأسبوع الثامن بخط أنابيب (RAG) كامل حتى يجيب فقط من وثيقة يوفرها الطالب. لا هلوسة مسموحة.</div>
+        <div class="pstk">(Claude API) · (Python) · التضمينات · (Cursor)</div>
+      </div>
+      <div class="pcard p3">
+        <div class="picon"><i class="ti ti-tournament" aria-hidden="true"></i></div>
+        <div class="pwk">المشروع الثالث — الأسبوع الثاني عشر</div>
+        <div class="pname">فريق وكلاء الذكاء الاصطناعي</div>
+        <div class="pdscr2">وكيل منسق يُفوّض إلى وكلاء متخصصين. يستخدم وكيل الباحث خط أنابيب (RAG) من المشروع الثاني. عرض مباشر وغير مكتوب أمام الفصل.</div>
+        <div class="pstk">(Claude API) · (Python) · حلقة الوكيل · (RAG) · (Cursor)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
+  <div class="footer">مقدمة إلى الذكاء الاصطناعي &nbsp;·&nbsp; دورة 12 أسبوعاً &nbsp;·&nbsp; 24 حصة &nbsp;·&nbsp; 3 مشاريع</div>
+</div>
+
+<button class="scroll-top" id="scrollTop" aria-label="العودة إلى الأعلى">
+  <i class="ti ti-arrow-up" aria-hidden="true"></i>
+</button>
+
+<script>
+'use strict';
+
+const phases = {
+  1: 'المرحلة 1 — أسس الذكاء الاصطناعي',
+  2: 'المرحلة 2 — أدوات وأخلاقيات الذكاء الاصطناعي',
+  3: 'المرحلة 3 — (Python) والبيانات',
+  4: 'المرحلة 4 — هندسة البيانات',
+  5: 'المرحلة 5 — روبوتات المحادثة، الضبط الدقيق و(RAG)',
+  6: 'المرحلة 6 — الوكلاء والبناء',
+};
+
+const weeks = [
+  {
+    n: 1, phase: 1, tag: { t: 'التاريخ والمفاهيم', c: 'bdg-purple' },
+    title: 'قصة الذكاء الاصطناعي وكيف تتعلم الآلات',
+    c1: { l: 'الحصة الأولى', n: 'من تورينج إلى (ChatGPT)', pts: [
+      'ما هو الذكاء؟ الإنسان مقابل الآلة',
+      'آلان تورينج، اختبار تورينج، وفترات ركود الذكاء الاصطناعي',
+      'ثورة التعلم العميق: (ImageNet)، (GPT)، (DALL-E)',
+      'الذكاء الاصطناعي في الحياة اليومية: الهواتف، (Netflix)، (GPS)، البحث',
+      'جدار الجدول الزمني: يرتب الطلاب المحطات الرئيسية بالترتيب',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'كيف يتعلم الذكاء الاصطناعي فعلاً', pts: [
+      'قياس: درس الذكاء الاصطناعي ملايين الكتب والأمثلة',
+      'التصنيف مقابل الانحدار — بلغة بسيطة',
+      'التعلم الخاضع للإشراف، غير الخاضع للإشراف، التعلم المعزز',
+      'الإفراط في الملاءمة والقصور: شرح بديهي',
+      'اختبار: أي نوع تعلم يناسب أي سيناريو؟',
+    ]},
+    goals: 'يفهم الطلاب تاريخ الذكاء الاصطناعي، وأنواع التعلم الرئيسية، ويمكنهم ذكر أمثلة واقعية بثقة.',
+    focus: null, flow: null, project: null,
+  },
+  {
+    n: 2, phase: 2, tag: { t: 'أدوات الذكاء الاصطناعي', c: 'bdg-teal' },
+    title: 'العمل مع أدوات الذكاء الاصطناعي — النصوص، الصور، البرمجة، والأوامر',
+    c1: { l: 'الحصة الأولى', n: 'الذكاء الاصطناعي النصي وهندسة الأوامر', pts: [
+      'نماذج اللغة الكبيرة (LLMs): ما هي وكيف تتنبأ بالنص',
+      'نافذة السياق والهلوسة بشرح بسيط',
+      '(ChatGPT) مقابل (Claude) مقابل (Gemini) — الفروقات الرئيسية',
+      'تقنيات الأوامر: الدور، السياق، الشكل، الأمثلة',
+      'سلسلة التفكير: اطلب من النموذج التفكير خطوة بخطوة',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'الذكاء الاصطناعي للصور ومساعدو البرمجة', pts: [
+      'نماذج الانتشار: من الضوضاء إلى الصورة (بدون رياضيات)',
+      'كتابة أوامر الصور: الأسلوب، المزاج، التركيبة',
+      'ما يفعله (Cursor) و(GitHub Copilot) فعلياً',
+      'البرمجة البشرية مع الذكاء الاصطناعي: من يفعل ماذا؟',
+      'تطبيق عملي: يستخدم الطلاب الأنواع الثلاثة من الأدوات',
+    ]},
+    goals: 'يكتب الطلاب أوامر فعّالة، ويفهمون كيف تعمل أدوات الصور والكود بالذكاء الاصطناعي، ويستخدمون الأدوات الرئيسية عملياً.',
+    focus: null, flow: null, project: null,
+  },
+  {
+    n: 3, phase: 2, tag: { t: 'الأخلاقيات والمجتمع', c: 'bdg-coral' },
+    title: 'أخلاقيات الذكاء الاصطناعي، التحيز، والمجتمع — التفكير النقدي',
+    c1: { l: 'الحصة الأولى', n: 'التحيز، العدالة، والضرر الحقيقي', pts: [
+      'من أين يأتي تحيز الذكاء الاصطناعي؟ (بيانات التدريب)',
+      'حالات حقيقية: التعرف على الوجوه، خوارزميات التوظيف',
+      'من المسؤول عندما يتسبب الذكاء الاصطناعي في ضرر؟',
+      'قانون الذكاء الاصطناعي الأوروبي (EU AI Act): نظرة عامة بلغة بسيطة',
+      'نقاش: هل يجب أن يتخذ الذكاء الاصطناعي قرارات طبية؟',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'الاستخدام المسؤول والصورة الأشمل', pts: [
+      'المعلومات المضللة: كيف يضخم الذكاء الاصطناعي المحتوى الكاذب',
+      'الخصوصية: ماذا يعرف الذكاء الاصطناعي عنك؟',
+      'التكلفة البيئية لتدريب النماذج الكبيرة',
+      'الوظائف والذكاء الاصطناعي: رؤية واقعية ومتوازنة',
+      'يكتب الطلاب ميثاقهم الشخصي لاستخدام الذكاء الاصطناعي',
+    ]},
+    goals: 'يعبّر الطلاب عن المخاطر الأخلاقية الرئيسية ويمكنهم تكوين رأي متوازن ومستنير حول الاستخدام المسؤول للذكاء الاصطناعي.',
+    focus: null, flow: null, project: null,
+  },
+  {
+    n: 4, phase: 3, tag: { t: 'الحواسيب و(Python)', c: 'bdg-amber' },
+    title: 'كيف تعمل الحواسيب وأولى برامجك بـ (Python)',
+    c1: { l: 'الحصة الأولى', n: 'داخل الآلة', pts: [
+      '(CPU)، (RAM)، (GPU)، التخزين — ما يفعله كل منها ولماذا',
+      'لماذا تهم وحدات معالجة الرسومات (GPU) للذكاء الاصطناعي: الرياضيات الموازية بشكل بسيط',
+      'الشبكات، السحابة، وواجهات برمجة التطبيقات (APIs) — قياس المطعم',
+      'الثنائي: كيف تتحدث الحواسيب بالأصفار والآحاد',
+      'عرض: مدير المهام — المعالج في الوقت الفعلي',
+    ]},
+    c2: { l: 'الحصة الثانية', n: '!مرحباً، (Python)', pts: [
+      'لماذا (Python)؟ لغة الذكاء الاصطناعي المفضلة',
+      'المتغيرات، النصوص، الأرقام، القيم المنطقية',
+      '(if / else)، حلقات التكرار، الدوال، القوائم',
+      'يكتب (Cursor) الكود؛ يقرأ الطلاب ويكيّفونه',
+      'تمرين: لعبة اختبارات مع تتبع النتائج',
+    ]},
+    goals: 'يفهم الطلاب البنية المادية التي يعمل عليها الذكاء الاصطناعي ويمكنهم كتابة وتشغيل برامج (Python) أساسية بمساعدة (Cursor).',
+    focus: null, flow: null, project: null,
+  },
+  {
+    n: 5, phase: 3, tag: { t: '(Python) والبيانات', c: 'bdg-amber' },
+    title: '(Python) للبيانات — التحميل، الاستكشاف، وتحديد مشاكل الجودة',
+    c1: { l: 'الحصة الأولى', n: 'العمل مع بيانات حقيقية في (Python)', pts: [
+      'ما هو (CSV)؟ فتحه في (Python)',
+      '(pandas): .read_csv()، .head()، .describe()، .shape',
+      'تصفية الصفوف وتحديد الأعمدة',
+      'يكتب (Cursor) كود المساعدة؛ يكيّفه الطلاب',
+      'يختار الطلاب مجموعة بيانات حقيقية تهمهم',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'اكتشاف البيانات الفوضوية + أولى الرسوم البيانية', pts: [
+      'لماذا لا تكون البيانات الواقعية نظيفة تقريباً أبداً',
+      'المشاكل الشائعة: القيم الفارغة، الأنواع الخاطئة، التكرار',
+      'اكتشاف المشاكل: .isnull()، .dtypes، .duplicated()',
+      'أساسيات (matplotlib): الأعمدة، الخطوط، النقاط',
+      'نشاط: اعثر على 3 مشاكل وسمّها في مجموعة البيانات',
+    ]},
+    goals: 'يحمّل الطلاب ويستكشفون ويعرضون مجموعة بيانات حقيقية في (Python) ويمكنهم تحديد مشاكل جودة البيانات.',
+    focus: null, flow: null, project: null,
+  },
+  {
+    n: 6, phase: 4, tag: { t: 'هندسة البيانات', c: 'bdg-green' },
+    title: 'هندسة البيانات — التنظيف، التحويل، وبناء خطوط الأنابيب',
+    c1: { l: 'الحصة الأولى', n: 'تنظيف البيانات وتحويلها', pts: [
+      'هندسة البيانات: السباكة وراء كل نظام ذكاء اصطناعي',
+      'التعامل مع القيم المفقودة: حذف، تعبئة، أم تعليم؟',
+      'إصلاح الأنواع، إزالة التكرار، توحيد النصوص',
+      'هندسة الميزات: إنشاء أعمدة جديدة مفيدة',
+      'التحقق: كتابة فحوصات بسيطة لجودة البيانات',
+      'عرض قبل/بعد مع مجموعة بيانات فوضوية حقيقية',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'بناء خط أنابيب قابل للتكرار + إطلاق المشروع الأول', pts: [
+      'تفكير خط الأنابيب: إدخال ← تنظيف ← تحويل ← إخراج',
+      'ربط جميع الخطوات في سكريبت (Python) واحد قابل للتكرار',
+      'حفظ المخرجات النظيفة: .to_csv()، .to_json()',
+      'تشغيل خط الأنابيب كاملاً بأمر واحد',
+      'قصة البيانات: تصوير ما تكشفه البيانات النظيفة',
+      'إطلاق المشروع الأول: إنقاذ البيانات الفوضوية',
+    ]},
+    goals: 'يبني الطلاب خط أنابيب كامل للتنظيف والتحويل ويفهمون لماذا تُعدّ جودة البيانات أساس كل نظام ذكاء اصطناعي.',
+    focus: { cls: 'fg', icon: 'ti-database', label: 'تركيز هندسة البيانات', text: 'استراتيجيات القيم المفقودة، تحويل الأنواع، إزالة التكرار، توحيد النصوص، هندسة الميزات، قواعد التحقق، وتصميم خطوط الأنابيب. كل شيء عملي مع (pandas) و(Cursor).' },
+    flow: null,
+    project: { cls: 'bg', label: 'المشروع الأول — يُطلق هذا الأسبوع', title: 'إنقاذ البيانات الفوضوية', desc: 'استلام مجموعة بيانات معطوبة، تنظيفها من البداية للنهاية، بناء خط أنابيب قابل للتكرار، توثيق كل قرار.' },
+  },
+  {
+    n: 7, phase: 4, tag: { t: 'هندسة البيانات', c: 'bdg-green' },
+    title: 'خطوط الأنابيب، التصوير البياني، وعرض قصة البيانات',
+    c1: { l: 'الحصة الأولى', n: 'خطوط الأنابيب والتصوير البياني', pts: [
+      'القراءة من (CSV) و(JSON) و(Excel) في سكريبت واحد',
+      'ربط خطوات تنظيف متعددة بشكل نظيف',
+      'رواية قصة بالبيانات: الرسم الصحيح، السؤال الصحيح',
+      'أخطاء الرسوم البيانية الشائعة وكيفية تجنبها',
+      'ربط المخرجات النظيفة بصفحة نتائج (HTML)',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'عروض المشروع الأول', pts: [
+      'يعرض كل طالب خط أنابيبه مباشرة',
+      'مقارنة قبل/بعد: عرض البيانات الخام مقابل النظيفة',
+      'الدفاع عن قرارات التنظيف المتخذة',
+      'تقييم الأقران: ما الأصعب؟ ما الذي فاجأك؟',
+      'ملخص: لماذا تصنع البيانات النظيفة أو تدمر نظام الذكاء الاصطناعي',
+    ]},
+    goals: 'يعرض الطلاب خط أنابيب البيانات الخاص بهم ويدافعون عنه. يختبرون الرابط المباشر بين جودة البيانات وجودة الاستنتاجات.',
+    focus: { cls: 'fg', icon: 'ti-database', label: 'تركيز هندسة البيانات', text: 'خط أنابيب كامل قابل للتكرار: استيعاب ← تنظيف ← تحويل ← تحقق ← إخراج ← تصوير. يشغّل الطلاب كل شيء بأمر واحد ويشرحون كل قرار.' },
+    flow: null,
+    project: { cls: 'bg', label: 'المشروع الأول — يُسلَّم هذا الأسبوع', title: 'إنقاذ البيانات الفوضوية — عرض مباشر', desc: 'جولة في خط الأنابيب، مقارنة قبل/بعد، والدروس المستفادة من تنظيف البيانات الحقيقية.' },
+  },
+  {
+    n: 8, phase: 5, tag: { t: 'روبوتات المحادثة', c: 'bdg-teal' },
+    title: 'بناء روبوت محادثة — واكتشاف حدوده',
+    c1: { l: 'الحصة الأولى', n: 'كيف تعمل روبوتات المحادثة', pts: [
+      'ما هو روبوت المحادثة؟ (قائم على قواعد مقابل مدعوم بالذكاء الاصطناعي)',
+      'مفاتيح (API): الحصول على وصول لـ(Claude) أو (OpenAI)',
+      'إجراء أول استدعاء (API) في (Python) مع (Cursor)',
+      'الأوامر النظامية: منح الروبوت شخصية ودوراً',
+      'الذاكرة متعددة الأدوار: كيفية تمرير سجل المحادثة',
+      'تطبيق عملي: بناء روبوت محادثة بسيط معاً في الفصل',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'الاصطدام بالجدار — ما لا تستطيع روبوتات المحادثة فعله', pts: [
+      'اختبار روبوت المحادثة بأسئلة صعبة يفشل فيها',
+      'عرض مباشر للهلوسة: شاهده يخترع أشياء بثقة',
+      'حد المعرفة: الروبوت لا يعرف الأحداث الأخيرة',
+      'لا يستطيع استخدام الوثائق الخاصة أو المخصصة',
+      'لا يستطيع تصفح الإنترنت أو الوصول للبيانات الحية',
+      'نقاش: ما الذي نحتاجه لإصلاح هذه المشاكل؟',
+    ]},
+    goals: 'يمتلك الطلاب روبوت محادثة عاملاً وقد جربوا مباشرة قيوده الأساسية — مما يخلق دافعاً حقيقياً لتعلم (RAG).',
+    focus: { cls: 'fc', icon: 'ti-messages', label: 'نهج الروبوت أولاً', text: 'يبني الطلاب قبل أن يفهموا الحدود. تجربة الفشل في الحصة الثانية مقصودة — تجعل (RAG) يبدو حلاً لمشكلة حقيقية أحسوا بها، وليس مفهوماً مجرداً.' },
+    flow: null, project: null,
+  },
+  {
+    n: 9, phase: 5, tag: { t: 'الضبط الدقيق (نظري)', c: 'bdg-pink' },
+    title: 'الضبط الدقيق — تعليم الذكاء الاصطناعي لغتك',
+    c1: { l: 'الحصة الأولى', n: 'ما هو الضبط الدقيق ومتى تستخدمه', pts: [
+      'ما قبل التدريب مقابل الضبط الدقيق: قياس جبل الجليد',
+      'ما الذي يغيره الضبط الدقيق في النموذج (بشكل بديهي)',
+      'حالات الاستخدام: نبرة دعم العملاء، اللغة الطبية، صوت العلامة التجارية',
+      'شكل بيانات التدريب للضبط الدقيق (أزواج أمر/استجابة)',
+      'متطلبات التكلفة والبيانات والوقت (مفاهيمياً)',
+      'الضبط الدقيق مقابل هندسة الأوامر: متى يكفي كل منهما؟',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'الضبط الدقيق مقابل (RAG) — اختيار الأداة الصحيحة', pts: [
+      'الضبط الدقيق يعلّم الأسلوب والسلوك — ليس حقائق جديدة',
+      '(RAG) يمنح النموذج وصولاً لمعرفة جديدة أثناء التشغيل',
+      'إطار القرار: أي مشكلة يحل كل منهما؟',
+      'متى تجمع بينهما: نموذج مضبوط دقيقاً + خط أنابيب (RAG)',
+      'مخاطر الضبط الدقيق: النسيان الكارثي، الإفراط في الملاءمة',
+      'الجسر: روبوت محادثة الأسبوع الثامن يحتاج (RAG) — إليك السبب',
+    ]},
+    goals: 'يمكن للطلاب شرح الضبط الدقيق مفاهيمياً، ومعرفة متى يستخدمونه مقابل (RAG) مقابل الأوامر، ولديهم دافع لبناء (RAG) الأسبوع القادم.',
+    focus: { cls: 'fpi', icon: 'ti-adjustments', label: 'أسبوع نظري فقط', text: 'لا كود هذا الأسبوع. التركيز كلياً على فهم ما هو الضبط الدقيق، ومتى يكون الخيار الصحيح، وكيف يقارن بـ(RAG) — بناء النموذج الذهني الذي يحتاجه الطلاب قبل بناء نظام (RAG).' },
+    flow: { text: 'الضبط الدقيق يحل مشاكل السلوك والأسلوب. (RAG) يحل مشاكل المعرفة. يغادر الطلاب هذا الأسبوع عارفين تماماً أي مشكلة سيحلها (RAG) — ولماذا.' },
+    project: null,
+  },
+  {
+    n: 10, phase: 5, tag: { t: '(RAG)', c: 'bdg-blue' },
+    title: '(RAG) — التوليد المعزز بالاسترجاع، إصلاح ما كسره روبوت المحادثة',
+    c1: { l: 'الحصة الأولى', n: 'كيف يحل (RAG) مشكلة المعرفة', pts: [
+      'تذكّر فشل روبوت المحادثة من الأسبوع الثامن — (RAG) يصلح هذه المشاكل',
+      'خط أنابيب (RAG): وثيقة ← قطع ← تضمينات ← بحث ← إجابة',
+      'قياس المكتبة: ابحث عنه قبل الإجابة، في كل مرة',
+      'التضمينات: المعنى كنقطة في الفضاء (بدون رياضيات)',
+      'قواعد البيانات المتجهية: خزانة ملفات مرتبة بالمعنى',
+      'عرض: نفس السؤال — روبوت المحادثة وحده مقابل روبوت المحادثة + (RAG)',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'بناء (RAG) فوق روبوت محادثة الأسبوع الثامن', pts: [
+      'تقطيع وثيقة إلى قطع قابلة للبحث (مع (Cursor))',
+      'توليد التضمينات عبر (API)',
+      'إيجاد أكثر القطع صلة لكل سؤال',
+      'حقن السياق المُسترجع في أمر روبوت المحادثة الموجود',
+      'اختبار: هل يجيب الآن فقط من الوثيقة؟',
+      'إطلاق المشروع الثاني: مساعد المعرفة الشخصية',
+    ]},
+    goals: 'يفهم الطلاب خط أنابيب (RAG) الكامل، وقاموا بترقية روبوت محادثة الأسبوع الثامن بـ(RAG)، وأطلقوا المشروع الثاني.',
+    focus: { cls: 'fb', icon: 'ti-search', label: 'تركيز (RAG)', text: 'مشكلة حد المعرفة، استراتيجيات التقطيع، البديهية وراء التضمينات، البحث عن التشابه المتجهي، وتعزيز الأوامر. روبوت الأسبوع الثامن يصبح الأساس — يُضاف (RAG) فوقه.' },
+    flow: { text: 'يكمل هذا الأسبوع مباشرةً الأسبوع الثامن. يقوم الطلاب بترقية روبوت محادثتهم الموجود بدلاً من البدء من الصفر — مما يجعل التحسين ملموساً ومُرضياً.' },
+    project: { cls: 'bb', label: 'المشروع الثاني — يُطلق هذا الأسبوع', title: 'مساعد المعرفة الشخصية', desc: 'ترقية روبوت محادثة الأسبوع الثامن بـ(RAG) حتى يجيب على الأسئلة فقط من وثيقة يوفرها الطالب.' },
+  },
+  {
+    n: 11, phase: 6, tag: { t: 'الوكلاء', c: 'bdg-teal' },
+    title: 'وكلاء الذكاء الاصطناعي وأنظمة الوكلاء المتعددين — ذكاء اصطناعي يتصرف ويخطط ويُفوّض',
+    c1: { l: 'الحصة الأولى', n: 'من روبوت المحادثة إلى الوكيل إلى الفريق', pts: [
+      'روبوت المحادثة مقابل الوكيل: الفرق الرئيسي (يتصرف مقابل يتحدث فقط)',
+      'حلقة (ReAct): تفكير ← تصرف ← مراقبة ← تكرار',
+      'أدوات يمكن للوكلاء استخدامها: البحث، الآلة الحاسبة، قارئ الملفات، (APIs)',
+      'ذاكرة الوكيل: قصيرة المدى (سياق) مقابل طويلة المدى (تخزين)',
+      'مقدمة الوكلاء المتعددين: نمط المنسق + المتخصص',
+      'أمثلة حقيقية: (AutoGPT)، (Perplexity)، استخدام (Claude) للحاسوب',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'بناء وكيل ونظام وكلاء متعددين', pts: [
+      'برمجة حلقة وكيل بسيطة في (Python) مع (Cursor)',
+      'منح الوكيل أداة: يقرر متى يستخدمها',
+      'وكيل المنسق يُفوّض إلى وكيلين متخصصين',
+      'أدوار المتخصصين: باحث (يستخدم (RAG))، كاتب، مدقق',
+      'يتواصل الوكلاء عبر رسائل منظمة',
+      'إطلاق المشروع الثالث: فريق وكلاء الذكاء الاصطناعي',
+    ]},
+    goals: 'يفهم الطلاب الوكلاء وهندسة الوكلاء المتعددين، وقاموا ببناء حلقة وكيل عاملة، وأطلقوا مشروعهم النهائي.',
+    focus: { cls: 'ft', icon: 'ti-tournament', label: 'تركيز الوكيل والوكلاء المتعددين', text: 'حلقة (ReAct)، تصميم استخدام الأدوات، نمط المنسق-العامل، المراسلة بين الوكلاء، ودمج (RAG) داخل وكيل الباحث. يبني (Cursor) الهيكل؛ يصمم الطلاب الأدوار والمنطق.' },
+    flow: { text: 'سيستخدم وكيل الباحث في نظام الوكلاء المتعددين خط أنابيب (RAG) من المشروع الثاني — يرى الطلاب الأسابيع الثلاثة تتصل في هندسة واحدة.' },
+    project: { cls: 'bt', label: 'المشروع الثالث — يُطلق هذا الأسبوع', title: 'فريق وكلاء الذكاء الاصطناعي', desc: 'وكلاء المنسق والمتخصصين. يستخدم وكيل الباحث خط أنابيب (RAG) من المشروع الثاني.' },
+  },
+  {
+    n: 12, phase: 6, tag: { t: 'الأسبوع النهائي', c: 'bdg-gray' },
+    title: 'العروض النهائية — عروض مباشرة، تأملات، وما التالي',
+    c1: { l: 'الحصة الأولى', n: 'اللمسات الأخيرة والتدريب', pts: [
+      'ساعات مكتب المدرب: إصلاح آخر الأخطاء مع (Cursor)',
+      'يتدرب الطلاب على عرضهم المباشر من البداية للنهاية',
+      'كتابة بطاقة نظام من صفحة واحدة: الهندسة + القرارات المتخذة',
+      'اختبار الحالات الحدية: ما الذي يكسر فريق الوكلاء؟',
+      'جولة مع الأقران: اشرح نظامك لزميل',
+    ]},
+    c2: { l: 'الحصة الثانية', n: 'العروض المباشرة والختام', pts: [
+      'يعرض كل طالب فريق وكلاء الذكاء الاصطناعي مباشرة',
+      'يعطي الجمهور النظام مهمة حقيقية غير مخططة',
+      'جوائز الأقران: الأكثر إبداعاً، الأكثر موثوقية، أفضل استخدام لـ(RAG)...',
+      'ملخص الدورة الكاملة: من تاريخ الذكاء الاصطناعي إلى أنظمة الوكلاء المتعددين',
+      'أين تذهب بعد ذلك: الموارد، المجتمعات، المسارات المهنية',
+    ]},
+    goals: 'يتخرج الطلاب بـ 3 مشاريع متصلة، ونظام وكلاء متعددين عامل، وخريطة ذهنية واضحة لمكدّس الذكاء الاصطناعي الكامل.',
+    focus: null,
+    flow: { text: 'يربط المشروع الثالث كل شيء: روبوت المحادثة (الأسبوع الثامن)، وخط أنابيب (RAG) (المشروع الثاني)، وحلقة الوكيل (الأسبوع الحادي عشر) تعمل جميعها معاً كنظام واحد.' },
+    project: { cls: 'bt', label: 'المشروع الثالث — يُسلَّم هذا الأسبوع', title: 'فريق وكلاء الذكاء الاصطناعي — العرض المباشر النهائي', desc: 'يكمل المنسق والمتخصصون مهمة حقيقية أعطاها الجمهور. عرض مباشر وغير مكتوب، 5 دقائق لكل طالب.' },
+  },
+];
+
+/* ── Build a single week card ── */
+function buildCard(w) {
+  const card = document.createElement('div');
+  card.className = 'wcard';
+  card.dataset.phase = w.phase;
+
+  const theoryTag = w.tag.t.includes('نظري')
+    ? '<span class="theory-tag">نظري فقط</span>' : '';
+
+  const focusHtml = w.focus
+    ? `<div class="fbox ${w.focus.cls}">
+         <div class="flabel"><i class="ti ${w.focus.icon}" aria-hidden="true" style="font-size:12px"></i>${w.focus.label}</div>
+         <div class="ftext">${w.focus.text}</div>
+       </div>` : '';
+
+  const flowHtml = w.flow
+    ? `<div class="flow-note">
+         <i class="ti ti-arrow-narrow-right" aria-hidden="true"></i>
+         <span>${w.flow.text}</span>
+       </div>` : '';
+
+  const projHtml = w.project
+    ? `<div class="pbanner ${w.project.cls}">
+         <div class="plb">${w.project.label}</div>
+         <div class="pttl">${w.project.title}</div>
+         <div class="pdsc">${w.project.desc}</div>
+       </div>` : '';
+
+  card.innerHTML = `
+    <div class="whead">
+      <span class="wnum">الأسبوع&nbsp;${w.n}</span>
+      <span class="wtitle">${theoryTag}${w.title}</span>
+      <div class="whead-right">
+        <span class="bdg ${w.tag.c}">${w.tag.t}</span>
+        <i class="ti ti-chevron-down chevron" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="wbody" role="region">
+      <div class="wbody-inner">
+        <div class="classes">
+          <div class="cbox">
+            <div class="clabel">${w.c1.l}&nbsp;·&nbsp;90 دقيقة</div>
+            <div class="cname">${w.c1.n}</div>
+            <ul class="cpts">${w.c1.pts.map(p => `<li>${p}</li>`).join('')}</ul>
+          </div>
+          <div class="cbox">
+            <div class="clabel">${w.c2.l}&nbsp;·&nbsp;90 دقيقة</div>
+            <div class="cname">${w.c2.n}</div>
+            <ul class="cpts">${w.c2.pts.map(p => `<li>${p}</li>`).join('')}</ul>
+          </div>
+        </div>
+        <div class="goals">
+          <div class="glabel"><i class="ti ti-target" aria-hidden="true" style="font-size:11px"></i>مخرجات التعلم</div>
+          <div class="gtext">${w.goals}</div>
+        </div>
+        ${focusHtml}${flowHtml}${projHtml}
+      </div>
+    </div>`;
+
+  card.querySelector('.whead').addEventListener('click', () => {
+    card.classList.toggle('open');
+  });
+
+  return card;
+}
+
+/* ── Render phase view ── */
+function render(phase) {
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  let lastPhase = null;
+
+  weeks
+    .filter(w => phase === 'all' || w.phase === parseInt(phase, 10))
+    .forEach(w => {
+      if (phase === 'all' && w.phase !== lastPhase) {
+        const strip = document.createElement('div');
+        strip.className = 'phase-strip';
+        strip.textContent = phases[w.phase];
+        grid.appendChild(strip);
+        lastPhase = w.phase;
+      }
+      grid.appendChild(buildCard(w));
+    });
+}
+
+/* ── Phase nav ── */
+document.getElementById('phaseNav').addEventListener('click', e => {
+  const btn = e.target.closest('.pbtn');
+  if (!btn) return;
+  document.querySelectorAll('.pbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render(btn.dataset.phase);
+});
+
+/* ── Scroll-to-top ── */
+const scrollBtn = document.getElementById('scrollTop');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('visible', window.scrollY > 320);
+}, { passive: true });
+scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+/* ── Initial render ── */
+render('all');
+</script>
+</body>
+</html>
